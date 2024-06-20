@@ -1,4 +1,4 @@
-local TeamCheck = true  -- Set this to false if you don't want to perform team checks
+local TeamCheck = false  -- Set this to false if you don't want to perform team checks
 
 -- Function to create a 2D box with an outline around a player
 local function create2DBox(player)
