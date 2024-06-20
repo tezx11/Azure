@@ -8,7 +8,7 @@ local function DrawLine()
     l.From = Vector2.new(0, 0)
     l.To = Vector2.new(1, 1)
     l.Color = Color3.fromRGB(255, 255, 255)
-    l.Thickness = 1.1
+    l.Thickness = 1
     l.Transparency = 1
     return l
 end
