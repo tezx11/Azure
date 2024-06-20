@@ -1,29 +1,31 @@
-local TeamCheck = false  -- Set this to false if you don't want to perform team checks
+local TeamCheck = true  -- Set this to false if you don't want to perform team checks
 
--- Function to create a box around a player
-local function createBox(player)
+-- Function to create a 2D box with an outline around a player
+local function create2DBox(player)
     local character = player.Character
     if character then
         local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
         if humanoidRootPart then
-            local box = Instance.new("Part")
-            box.Size = Vector3.new(5, 5, 5)  -- Adjust the size of the box as needed
-            box.Anchored = true
-            box.CanCollide = false
-            box.Transparency = 0.5
-            box.Color = Color3.new(1, 0, 0)  -- Red color box
-            box.Parent = workspace
-            
-            -- Update the box position
-            local function updateBox()
-                if character and humanoidRootPart then
-                    box.CFrame = humanoidRootPart.CFrame
-                else
-                    box:Destroy()
-                end
-            end
-            
-            game:GetService("RunService").RenderStepped:Connect(updateBox)
+            local billboardGui = Instance.new("BillboardGui")
+            billboardGui.Size = UDim2.new(0, 100, 0, 100)  -- Adjust the size of the box as needed
+            billboardGui.StudsOffset = Vector3.new(0, 3, 0)  -- Offset the box above the player
+            billboardGui.Adornee = humanoidRootPart
+            billboardGui.AlwaysOnTop = true
+            billboardGui.Parent = character
+
+            local outline = Instance.new("Frame")
+            outline.Size = UDim2.new(1, 4, 1, 4)  -- Outline size
+            outline.Position = UDim2.new(0, -2, 0, -2)
+            outline.BackgroundColor3 = Color3.new(0, 0, 0)  -- Black outline color
+            outline.BorderSizePixel = 0
+            outline.Parent = billboardGui
+
+            local box = Instance.new("Frame")
+            box.Size = UDim2.new(1, 0, 1, 0)
+            box.Position = UDim2.new(0, 0, 0, 0)
+            box.BackgroundColor3 = Color3.new(1, 1, 1)  -- White box color
+            box.BorderSizePixel = 0
+            box.Parent = outline
         end
     end
 end
@@ -39,12 +41,12 @@ end
 -- Function to handle new player
 local function onPlayerAdded(player)
     if not TeamCheck or (TeamCheck and isSameTeam(player, game.Players.LocalPlayer)) then
-        createBox(player)
+        create2DBox(player)
     end
     
     player.CharacterAdded:Connect(function()
         if not TeamCheck or (TeamCheck and isSameTeam(player, game.Players.LocalPlayer)) then
-            createBox(player)
+            create2DBox(player)
         end
     end)
 end
@@ -62,7 +64,7 @@ if TeamCheck then
         player:GetPropertyChangedSignal("Team"):Connect(function()
             -- Recreate boxes if team changes
             for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-                createBox(otherPlayer)
+                create2DBox(otherPlayer)
             end
         end)
     end)
