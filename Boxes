@@ -1,0 +1,69 @@
+local TeamCheck = true  -- Set this to false if you don't want to perform team checks
+
+-- Function to create a box around a player
+local function createBox(player)
+    local character = player.Character
+    if character then
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart then
+            local box = Instance.new("Part")
+            box.Size = Vector3.new(5, 5, 5)  -- Adjust the size of the box as needed
+            box.Anchored = true
+            box.CanCollide = false
+            box.Transparency = 0.5
+            box.Color = Color3.new(1, 0, 0)  -- Red color box
+            box.Parent = workspace
+            
+            -- Update the box position
+            local function updateBox()
+                if character and humanoidRootPart then
+                    box.CFrame = humanoidRootPart.CFrame
+                else
+                    box:Destroy()
+                end
+            end
+            
+            game:GetService("RunService").RenderStepped:Connect(updateBox)
+        end
+    end
+end
+
+-- Function to check team
+local function isSameTeam(player1, player2)
+    if player1.Team and player2.Team then
+        return player1.Team == player2.Team
+    end
+    return false
+end
+
+-- Function to handle new player
+local function onPlayerAdded(player)
+    if not TeamCheck or (TeamCheck and isSameTeam(player, game.Players.LocalPlayer)) then
+        createBox(player)
+    end
+    
+    player.CharacterAdded:Connect(function()
+        if not TeamCheck or (TeamCheck and isSameTeam(player, game.Players.LocalPlayer)) then
+            createBox(player)
+        end
+    end)
+end
+
+-- Connect the function to existing and new players
+for _, player in pairs(game.Players:GetPlayers()) do
+    onPlayerAdded(player)
+end
+
+game.Players.PlayerAdded:Connect(onPlayerAdded)
+
+-- Handle team change (if required)
+if TeamCheck then
+    game.Players.PlayerRemoving:Connect(function(player)
+        player:GetPropertyChangedSignal("Team"):Connect(function()
+            -- Recreate boxes if team changes
+            for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+                createBox(otherPlayer)
+            end
+        end)
+    end)
+end
