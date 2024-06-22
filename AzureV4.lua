@@ -1355,13 +1355,13 @@ function load()
 
     do
         --// UI
-        local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ziheim51000/test/main/azurev4lib"))()
-        local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/SaveManager.lua"))()
-        local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/caIIed/Linoria-Rewrite/main/Theme%20Manager.lua"))()
+        local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/tezx11/Azure/main/Library.lua"))()
+        local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/tezx11/Azure/main/SaveManager.lua"))()
+        local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/tezx11/Azure/main/ThemeManager.lua"))()
 
         --// Main Window
         local Window = Library:CreateWindow({
-            Title = "Ratz V99 NiggersK -- farzad, Credits : LineMaster",
+            Title = "nigger v2",
             Center = true,
             AutoShow = true,
             TabPadding = 8,
